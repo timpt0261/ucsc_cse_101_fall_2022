@@ -1,0 +1,18 @@
+{
+// Configure your Run and Preview buttons here.
+
+// Run button configuration
+  "commands": {
+        "Node version": "node --version"
+  },
+
+// Preview button configuration
+  "preview": {
+        "Project Index (static)": "https://{{domain}}/{{index}}",
+        "Current File (static)": "https://{{domain}}/{{filepath}}",
+        "Box URL": "http://{{domain3000}}/",
+        "Box URL SSL": "https://{{domain3000}}/"
+  },
+  "autogradeTestScripts": [".guides/secure/grading_script.sh"],
+  "debugger": [{"type":"GDB","command":"wordcounter","before":"","uuid":"537deeef-a084-8cdc-48f7-05b6ddb8a4b3","name":"LinkedList"}]
+}

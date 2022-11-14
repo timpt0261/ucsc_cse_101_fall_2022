@@ -1,0 +1,12 @@
+HW1: Shakespeare
+Reuben T. Chavez Fall 2022
+
+My file implemnts two program. The first implementing a linked list data structure. The second takes a file for input and output, to determine the 
+length and frequencyof certain words within the shakespeare text file.
+
+The likend list uses implemetions given through th egivesn LinkedList files and recursive method inpired from class and in section. 
+My merge_sort algorthim was in refrenced by the following links below.
+
+Refrences : https://www.programiz.com/dsa/merge-sort
+             https://www.geeksforgeeks.org/merge-sort/
+             https://www.geeksforgeeks.org/merge-sort-for-linked-list/
