@@ -5,15 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "AVL Tree Debugger",
+            "name": "AVL TREE Debugger",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Wordrange/wordrange",
-            "args": [
-                "simple-input.txt",
-                "out.o"
-            ],
-            "stopAtEntry": true,
+            "args": ["Wordrange/simple-input.txt", "out.o"],
+            "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
@@ -32,5 +29,6 @@
                 }
             ]
         }
+        
     ]
 }
