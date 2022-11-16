@@ -10,12 +10,12 @@
             "request": "launch",
             "program": "${workspaceFolder}/Wordrange/wordrange",
             "args": ["Wordrange/simple-input.txt", "out.o"],
-            "stopAtEntry": false,
+            "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/path/to/gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -29,6 +29,6 @@
                 }
             ]
         }
-        
+
     ]
 }
