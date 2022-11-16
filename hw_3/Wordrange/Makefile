@@ -1,18 +1,18 @@
 CXX = g++
-CXXFLAGS = -Wall 
+CXXFLAGS = -Wall -g
 
-OBJECTS = avl.o treewrapper.o
+OBJECTS = avl.o wordrange.o
 
-treewrapper: $(OBJECTS)
-	$(CXX) -g $(CXXFLAGS) -o treewrapper avl.o treewrapper.o
+wordrange: $(OBJECTS)
+	$(CXX) -g $(CXXFLAGS) -o wordrange avl.o wordrange.o
 
 avl.o: avl.cpp avl.h
 	$(CXX) -g $(CXXFLAGS) -c avl.cpp
 	
-treewrapper.o: avl.cpp avl.h treewrapper.cpp
-	$(CXX) -g $(CXXFLAGS) -c treewrapper.cpp
+wordrange.o: avl.cpp avl.h wordrange.cpp
+	$(CXX) -g $(CXXFLAGS) -c wordrange.cpp
 
 clean: 
 	rm -f *.o
-	rm treewrapper
+	rm wordrange
 
