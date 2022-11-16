@@ -159,40 +159,40 @@ void AVL::insert(string key)
   else
   {
     insert(root, to_insert); // make call to recursive insert, starting from root
-    root->height = max(height(root->left), height(root->right)) + 1;
-
-    // 3. Calculate balance of nodes
-    int balance = BalanceFactor(root);
-
-    if (balance > 1)
-    {
-      if (to_insert->key < root->left->key)
-      {
-        right_rotate(root);
-        return;
-      }
-      else if (to_insert->key > root->left->key)
-      {
-        root->left = left_rotate(root->left);
-        right_rotate(root);
-        return;
-      }
-    }
-    if (balance < -1)
-    {
-      if (to_insert->key > root->right->key)
-      {
-        left_rotate(root);
-        return;
-      }
-      else if (to_insert->key < root->right->key)
-      {
-        root->right = right_rotate(root->right);
-        left_rotate(root);
-        return;
-      }
-    }
   }
+
+  
+  // // 2. Update height of ancestor
+  // start->height = max(height(start->left), height(start->right)) + 1;
+
+  // // 3. Calculate balance of nodes
+  // int balance = BalanceFactor(start);
+
+  // if (balance > 1)
+  // {
+  //   if (to_insert->key < start->left->key)
+  //   {
+  //     return right_rotate(start);
+  //   }
+  //   else if (to_insert->key > start->left->key)
+  //   {
+  //     start->left = left_rotate(start->left);
+  //     return right_rotate(start);
+  //   }
+  // }
+  // if (balance < -1)
+  // {
+  //   if (to_insert->key > start->right->key)
+  //   {
+  //     return left_rotate(start);
+  //   }
+  //   else if (to_insert->key < start->right->key)
+  //   {
+  //     start->right = right_rotate(start->right);
+  //     return left_rotate(start);
+  //   }
+  // }
+
 
   return;
 }
@@ -202,66 +202,35 @@ void AVL::insert(string key)
 Node *AVL::insert(Node *start, Node *to_insert)
 {
   if (start == NULL) // in general, this should not happen. We never call insert from a null tree
-    return NULL;
-  if (to_insert->key <= start->key) // inserted start has smaller (or equal) key, so go left
+    return;
+  if (to_insert->key <= start->key) // inserted node has smaller (or equal) key, so go left
   {
     if (start->left == NULL)
     {
-      start->left = to_insert;     // make this start the left child
-      start->left->parent = start; // set the parent pointer
-      // return start;
+      start->left = to_insert;   // make this node the left child
+      to_insert->parent = start; // set the parent pointer
+      return;
     }
     else // need to make recursive call
     {
-      start = insert(start->left, to_insert);
+      insert(start->left, to_insert);
+      return;
     }
   }
-  else // inserted start has larger key, so go right
+  else // inserted node has larger key, so go right
   {
     if (start->right == NULL)
     {
-      start->right = to_insert;  // make this start the right child
+      start->right = to_insert;  // make this node the right child
       to_insert->parent = start; // set the parent pointer
-      // return start;
+      return;
     }
     else // need to make recursive call
     {
-      start = insert(start->right, to_insert);
+      insert(start->right, to_insert);
+      return;
     }
   }
-
-  // 2. Update height of ancestor
-  start->height = max(height(start->left), height(start->right)) + 1;
-
-  // 3. Calculate balance of nodes
-  int balance = BalanceFactor(start);
-
-  if (balance > 1)
-  {
-    if (to_insert->key < start->left->key)
-    {
-      return right_rotate(start);
-    }
-    else if (to_insert->key > start->left->key)
-    {
-      start->left = left_rotate(start->left);
-      return right_rotate(start);
-    }
-  }
-  if (balance < -1)
-  {
-    if (to_insert->key > start->right->key)
-    {
-      return left_rotate(start);
-    }
-    else if (to_insert->key < start->right->key)
-    {
-      start->right = right_rotate(start->right);
-      return left_rotate(start);
-    }
-  }
-
-  return start;
 }
 
 // find(string val): Finds a Node with key "val"
