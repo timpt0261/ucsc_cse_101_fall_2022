@@ -153,14 +153,12 @@ Node *AVL::right_rotate(Node *y)
 
 Node* AVL:: reconstruct(Node* node, string key){
   int balance = BalanceFactor(node);
-  if(balance >= -1 || balance <= 1){
-    return node;
-  }else if(balance > 1){
+  if(balance > 2){
     //is left heavy
-    node->left = reconstruct(node->left, key);
-  }else{
+    node = reconstruct(node->left, key);
+  }else if(balance < -2){
     //is right heavy
-    node->right = reconstruct(node->right, key);
+    node = reconstruct(node->right, key);
   }
 
   if (balance > 1)
@@ -187,6 +185,7 @@ Node* AVL:: reconstruct(Node* node, string key){
       return left_rotate(node);
     }
   }
+
   return node;
 }
 
@@ -206,10 +205,8 @@ void AVL::insert(string key)
   // 3. Calculate balance of nodes
   int balance = BalanceFactor(root);
 
-  if(balance > 1){
-    root->left =reconstruct(root->left, to_insert->key);
-  }else if(balance < 1){
-    root->right = reconstruct(root->right, to_insert->key);
+  if(balance > -1 || balance < 1  ){
+    root = reconstruct(root, to_insert->key);
   }
   return;
 }
@@ -226,12 +223,13 @@ void AVL::insert(Node *start, Node *to_insert)
     {
       start->left = to_insert;   // make this node the left child
       to_insert->parent = start; // set the parent pointer
+      start->height = max(height(start->left), height(start->right)) + 1;
       return;
     }
     else // need to make recursive call
     {
       insert(start->left, to_insert);
-      start->height = max(height(start->left), height(start->right)) + 1;
+      
       return;
     }
   }
@@ -241,12 +239,13 @@ void AVL::insert(Node *start, Node *to_insert)
     {
       start->right = to_insert;  // make this node the right child
       to_insert->parent = start; // set the parent pointer
+      start->height = max(height(start->left), height(start->right)) + 1;
       return;
     }
     else // need to make recursive call
     {
       insert(start->right, to_insert);
-      start->height = max(height(start->left), height(start->right)) + 1;
+      
       return;
     }
   }

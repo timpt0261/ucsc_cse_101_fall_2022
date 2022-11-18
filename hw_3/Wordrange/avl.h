@@ -26,7 +26,7 @@ public:
   Node(string val) // constructor that sets key to val
   {
     key = val;
-    height = 1;
+    height = 0;
     left = right = parent = NULL; // setting everything to NULL
   }
 };
