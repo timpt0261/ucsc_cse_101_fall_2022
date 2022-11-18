@@ -151,6 +151,45 @@ Node *AVL::right_rotate(Node *y)
   return x;
 }
 
+Node* AVL:: reconstruct(Node* node, string key){
+  int balance = BalanceFactor(node);
+  if(balance >= -1 || balance <= 1){
+    return node;
+  }else if(balance > 1){
+    //is left heavy
+    node->left = reconstruct(node->left, key);
+  }else{
+    //is right heavy
+    node->right = reconstruct(node->right, key);
+  }
+
+  if (balance > 1)
+  {
+    if (key < node->left->key)
+    {
+      return right_rotate(node);
+    }
+    else if (key > node->left->key)
+    {
+      node->left = left_rotate(node->left);
+      return right_rotate(node);
+    }
+  }
+  if (balance < -1)
+  {
+    if (key > node->right->key)
+    {
+      return left_rotate(node);
+    }
+    else if (key < node->right->key)
+    {
+      node->right = right_rotate(node->right);
+      return left_rotate(node);
+    }
+  }
+  return node;
+}
+
 void AVL::insert(string key)
 {
   Node *to_insert = new Node(key); // create a new Node with the value val
@@ -161,45 +200,23 @@ void AVL::insert(string key)
     insert(root, to_insert); // make call to recursive insert, starting from root
   }
 
-  
-  // // 2. Update height of ancestor
-  // start->height = max(height(start->left), height(start->right)) + 1;
+  // 2. Update height of ancestor
+  root->height = max(height(root->left), height(root->right)) + 1;
 
-  // // 3. Calculate balance of nodes
-  // int balance = BalanceFactor(start);
+  // 3. Calculate balance of nodes
+  int balance = BalanceFactor(root);
 
-  // if (balance > 1)
-  // {
-  //   if (to_insert->key < start->left->key)
-  //   {
-  //     return right_rotate(start);
-  //   }
-  //   else if (to_insert->key > start->left->key)
-  //   {
-  //     start->left = left_rotate(start->left);
-  //     return right_rotate(start);
-  //   }
-  // }
-  // if (balance < -1)
-  // {
-  //   if (to_insert->key > start->right->key)
-  //   {
-  //     return left_rotate(start);
-  //   }
-  //   else if (to_insert->key < start->right->key)
-  //   {
-  //     start->right = right_rotate(start->right);
-  //     return left_rotate(start);
-  //   }
-  // }
-
-
+  if(balance > 1){
+    root->left =reconstruct(root->left, to_insert->key);
+  }else if(balance < 1){
+    root->right = reconstruct(root->right, to_insert->key);
+  }
   return;
 }
 // insert(Node* node, Node* to_insert): Inserts the Node to_insert into tree rooted at node. We will always call with node being non-null. Note that there may be multiple copies of val in the list.
 // Input: Int to insert into the subtree
 // Output: Void, just inserts new Node
-Node *AVL::insert(Node *start, Node *to_insert)
+void AVL::insert(Node *start, Node *to_insert)
 {
   if (start == NULL) // in general, this should not happen. We never call insert from a null tree
     return;
@@ -214,6 +231,7 @@ Node *AVL::insert(Node *start, Node *to_insert)
     else // need to make recursive call
     {
       insert(start->left, to_insert);
+      start->height = max(height(start->left), height(start->right)) + 1;
       return;
     }
   }
@@ -228,6 +246,7 @@ Node *AVL::insert(Node *start, Node *to_insert)
     else // need to make recursive call
     {
       insert(start->right, to_insert);
+      start->height = max(height(start->left), height(start->right)) + 1;
       return;
     }
   }

@@ -9,7 +9,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/Wordrange/wordrange",
-        "args": ["simple-input.txt", "output.txt"],
+        "args": ["Tests/allwords-basic.txt", "output.txt"],
         "stopAtEntry": true,
         "cwd": "${fileDirname}",
         "environment": [],
