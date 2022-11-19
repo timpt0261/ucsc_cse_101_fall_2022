@@ -74,11 +74,11 @@ int AVL::BalanceFactor(Node *start) // returns the Balance Factor of the current
   return height(start->left) - height(start->right);
 }
 
-Node *AVL::left_rotate(Node *x)
+void AVL::left_rotate(Node *x)
 {
-  if (x == NULL || x->left == NULL || x->right == NULL)
+  if (x == NULL)
   {
-    return x == NULL ? NULL : x;
+    return;
   }
 
   Node *parent = x == root ? NULL : x->parent;
@@ -110,14 +110,14 @@ Node *AVL::left_rotate(Node *x)
   x->height = max(height(x->right), height(x->left)) + 1;
   y->height = max(height(y->right), height(y->left)) + 1;
 
-  return x;
+  return;
 }
 
-Node *AVL::right_rotate(Node *y)
+void AVL::right_rotate(Node *y)
 {
-  if (y == NULL || y->left == NULL || y->right == NULL)
+  if (y == NULL)
   {
-    return y == NULL ? NULL : y;
+    return;
   }
   Node *parent = y == root ? NULL : y->parent;
   Node *x = y->left;
@@ -148,45 +148,49 @@ Node *AVL::right_rotate(Node *y)
   y->height = max(height(y->right), height(y->left)) + 1;
   x->height = max(height(x->right), height(x->left)) + 1;
 
-  return x;
+  return;
 }
 
-Node* AVL:: reconstruct(Node* node, string key){
+void AVL:: reconstruct(Node* node, string key){
   int balance = BalanceFactor(node);
   if(balance > 2){
     //is left heavy
-    node = reconstruct(node->left, key);
+    reconstruct(node->left, key);
   }else if(balance < -2){
     //is right heavy
-    node = reconstruct(node->right, key);
+    reconstruct(node->right, key);
   }
 
   if (balance > 1)
   {
     if (key < node->left->key)
     {
-      return right_rotate(node);
+      right_rotate(node);
+      return;
     }
     else if (key > node->left->key)
     {
-      node->left = left_rotate(node->left);
-      return right_rotate(node);
+      left_rotate(node->left);
+      right_rotate(node);
+      return;
     }
   }
   if (balance < -1)
   {
     if (key > node->right->key)
     {
-      return left_rotate(node);
+      left_rotate(node);
+      return;
     }
     else if (key < node->right->key)
     {
-      node->right = right_rotate(node->right);
-      return left_rotate(node);
+      right_rotate(node->right);
+      left_rotate(node);
+      return;
     }
   }
 
-  return node;
+  return;
 }
 
 void AVL::insert(string key)
@@ -199,14 +203,14 @@ void AVL::insert(string key)
     insert(root, to_insert); // make call to recursive insert, starting from root
   }
 
-  // 2. Update height of ancestor
+  // // 2. Update height of ancestor
   root->height = max(height(root->left), height(root->right)) + 1;
 
   // 3. Calculate balance of nodes
   int balance = BalanceFactor(root);
 
-  if(balance > -1 || balance < 1  ){
-    root = reconstruct(root, to_insert->key);
+  if(balance < -1 || balance > 1  ){
+    reconstruct(root, to_insert->key);
   }
   return;
 }
@@ -229,7 +233,12 @@ void AVL::insert(Node *start, Node *to_insert)
     else // need to make recursive call
     {
       insert(start->left, to_insert);
-      
+      int balance = BalanceFactor(root);
+
+      if (balance < -1 || balance > 1)
+      {
+        reconstruct(root, to_insert->key);
+      }
       return;
     }
   }
@@ -245,7 +254,12 @@ void AVL::insert(Node *start, Node *to_insert)
     else // need to make recursive call
     {
       insert(start->right, to_insert);
-      
+      int balance = BalanceFactor(root);
+
+      if (balance < -1 || balance > 1)
+      {
+        reconstruct(root, to_insert->key);
+      }
       return;
     }
   }

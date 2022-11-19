@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     if(strcmp(op,"r") == 0) // ranges queries
     {
       cout << "Range("<<val_1 << " ," << val_2 << ")" <<endl;
-      output << myAVL.range(val_1, val_2)<<endl;
+      output << to_string(myAVL.range(val_1, val_2)) <<endl;
     }
     // if(strcmp(op,"d") == 0) // delete from list
     // {

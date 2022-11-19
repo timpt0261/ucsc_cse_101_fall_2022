@@ -26,7 +26,7 @@ public:
   Node(string val) // constructor that sets key to val
   {
     key = val;
-    height = 0;
+    height = 1;
     left = right = parent = NULL; // setting everything to NULL
   }
 };
@@ -48,9 +48,9 @@ public:
   int max(int, int);          // return max
   int height(Node *);         // returns height of the node
   int BalanceFactor(Node *);  // returns the Balance Factor of the current node
-  Node *left_rotate(Node *);  // Complete a left rotation
-  Node *right_rotate(Node *); // Completes a right rotation
-  Node* reconstruct(Node*, string);
+  void left_rotate(Node *);  // Complete a left rotation
+  void right_rotate(Node *); // Completes a right rotation
+  void reconstruct(Node*, string);
 
   void insert(string);
   void insert(Node *, Node *);       // simple BST insertion plus a rotation
