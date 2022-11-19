@@ -228,7 +228,7 @@ Node* AVL::insert(Node *start, Node *to_insert)
     }
     else  // need to make recursive call
     {
-      start = insert(start->left, to_insert);
+      start->left = insert(start->left, to_insert);
       if(height(start) >= 3){
         return reconstruct(start, to_insert->key);
       }
@@ -246,7 +246,7 @@ Node* AVL::insert(Node *start, Node *to_insert)
     }
     else // need to make recursive call
     {
-      start = insert(start->right, to_insert);
+      start->right = insert(start->right, to_insert);
       if (height(start) >= 3)
       {
         return reconstruct(start, to_insert->key);
