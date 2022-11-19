@@ -74,11 +74,11 @@ int AVL::BalanceFactor(Node *start) // returns the Balance Factor of the current
   return height(start->left) - height(start->right);
 }
 
-void AVL::left_rotate(Node *x)
+Node* AVL::left_rotate(Node *x)
 {
   if (x == NULL)
   {
-    return;
+    return x;
   }
 
   Node *parent = x == root ? NULL : x->parent;
@@ -89,19 +89,19 @@ void AVL::left_rotate(Node *x)
   y->left = x;
   x->right = T2;
 
-  // update parent
-  if (x == root)
-  {
-    root = y;
-  }
-  else if (parent->left == x)
-  {
-    parent->left = y;
-  }
-  else
-  {
-    parent->right = y;
-  }
+  // // update parent
+  // if (x == root)
+  // {
+  //   root = y;
+  // }
+  // else if (parent->left == x)
+  // {
+  //   parent->left = y;
+  // }
+  // else
+  // {
+  //   parent->right = y;
+  // }
 
   y->parent = parent;
   x->parent = y;
@@ -110,14 +110,14 @@ void AVL::left_rotate(Node *x)
   x->height = max(height(x->right), height(x->left)) + 1;
   y->height = max(height(y->right), height(y->left)) + 1;
 
-  return;
+  return y;
 }
 
-void AVL::right_rotate(Node *y)
+Node* AVL::right_rotate(Node *y)
 {
   if (y == NULL)
   {
-    return;
+    return y;
   }
   Node *parent = y == root ? NULL : y->parent;
   Node *x = y->left;
@@ -128,18 +128,18 @@ void AVL::right_rotate(Node *y)
   y->left = T2;
 
   // update parent
-  if (y == root)
-  {
-    root = x;
-  }
-  else if (parent->left == y)
-  {
-    parent->left = x;
-  }
-  else
-  {
-    parent->right = x;
-  }
+  // if (y == root)
+  // {
+  //   root = x;
+  // }
+  // else if (parent->left == y)
+  // {
+  //   parent->left = x;
+  // }
+  // else
+  // {
+  //   parent->right = x;
+  // }
 
   x->parent = parent;
   y->parent = x;
@@ -148,49 +148,45 @@ void AVL::right_rotate(Node *y)
   y->height = max(height(y->right), height(y->left)) + 1;
   x->height = max(height(x->right), height(x->left)) + 1;
 
-  return;
+  return x;
 }
 
-void AVL:: reconstruct(Node* node, string key){
+Node* AVL:: reconstruct(Node* node, string key){
   int balance = BalanceFactor(node);
   if(balance > 2){
     //is left heavy
-    reconstruct(node->left, key);
+    node = reconstruct(node->left, key);
   }else if(balance < -2){
     //is right heavy
-    reconstruct(node->right, key);
+    node = reconstruct(node->right, key);
   }
 
   if (balance > 1)
   {
     if (key < node->left->key)
     {
-      right_rotate(node);
-      return;
+      return right_rotate(node);
     }
     else if (key > node->left->key)
     {
-      left_rotate(node->left);
-      right_rotate(node);
-      return;
+      node->left = left_rotate(node->left);
+      return right_rotate(node);
     }
   }
   if (balance < -1)
   {
     if (key > node->right->key)
     {
-      left_rotate(node);
-      return;
+      return left_rotate(node);
     }
     else if (key < node->right->key)
     {
-      right_rotate(node->right);
-      left_rotate(node);
-      return;
+      node ->right = right_rotate(node->right);
+      return left_rotate(node);
     }
   }
 
-  return;
+  return node;
 }
 
 void AVL::insert(string key)
@@ -200,7 +196,7 @@ void AVL::insert(string key)
     root = to_insert;              // make new node the root
   else
   {
-    insert(root, to_insert); // make call to recursive insert, starting from root
+    root = insert(root, to_insert); // make call to recursive insert, starting from root
   }
 
   // // 2. Update height of ancestor
@@ -210,59 +206,56 @@ void AVL::insert(string key)
   int balance = BalanceFactor(root);
 
   if(balance < -1 || balance > 1  ){
-    reconstruct(root, to_insert->key);
+    root = reconstruct(root, to_insert->key);
   }
   return;
 }
 // insert(Node* node, Node* to_insert): Inserts the Node to_insert into tree rooted at node. We will always call with node being non-null. Note that there may be multiple copies of val in the list.
 // Input: Int to insert into the subtree
 // Output: Void, just inserts new Node
-void AVL::insert(Node *start, Node *to_insert)
+Node* AVL::insert(Node *start, Node *to_insert)
 {
   if (start == NULL) // in general, this should not happen. We never call insert from a null tree
-    return;
-  if (to_insert->key <= start->key) // inserted node has smaller (or equal) key, so go left
+    return start;
+  if (to_insert->key < start->key) // inserted node has smaller (or equal) key, so go left
   {
     if (start->left == NULL)
     {
       start->left = to_insert;   // make this node the left child
       to_insert->parent = start; // set the parent pointer
       start->height = max(height(start->left), height(start->right)) + 1;
-      return;
+      return start;
     }
-    else // need to make recursive call
+    else  // need to make recursive call
     {
-      insert(start->left, to_insert);
-      int balance = BalanceFactor(root);
-
-      if (balance < -1 || balance > 1)
-      {
-        reconstruct(root, to_insert->key);
+      start = insert(start->left, to_insert);
+      if(height(start) >= 3){
+        return reconstruct(start, to_insert->key);
       }
-      return;
+      return start;
     }
   }
-  else // inserted node has larger key, so go right
+  else if (to_insert->key > start->key) // inserted node has larger key, so go right
   {
     if (start->right == NULL)
     {
       start->right = to_insert;  // make this node the right child
       to_insert->parent = start; // set the parent pointer
       start->height = max(height(start->left), height(start->right)) + 1;
-      return;
+      return start;
     }
     else // need to make recursive call
     {
-      insert(start->right, to_insert);
-      int balance = BalanceFactor(root);
-
-      if (balance < -1 || balance > 1)
+      start = insert(start->right, to_insert);
+      if (height(start) >= 3)
       {
-        reconstruct(root, to_insert->key);
+        return reconstruct(start, to_insert->key);
       }
-      return;
+      return start;
     }
   }
+
+  return start;
 }
 
 // find(string val): Finds a Node with key "val"

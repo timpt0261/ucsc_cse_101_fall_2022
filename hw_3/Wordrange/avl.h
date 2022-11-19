@@ -48,12 +48,12 @@ public:
   int max(int, int);          // return max
   int height(Node *);         // returns height of the node
   int BalanceFactor(Node *);  // returns the Balance Factor of the current node
-  void left_rotate(Node *);  // Complete a left rotation
-  void right_rotate(Node *); // Completes a right rotation
-  void reconstruct(Node*, string);
+  Node* left_rotate(Node *);  // Complete a left rotation
+  Node* right_rotate(Node *); // Completes a right rotation
+  Node* reconstruct(Node*, string);
 
   void insert(string);
-  void insert(Node *, Node *);       // simple BST insertion plus a rotation
+  Node* insert(Node *, Node *);       // simple BST insertion plus a rotation
   Node *find(string);                 // find int in tree, and return pointer to node with that int. If there are multiple copies, this only finds one copy
   Node *find(Node *, string);         // recursive version that finds in a rooted subtree
   Node *minNode(Node *);              // gets minimum node in rooted subtree
