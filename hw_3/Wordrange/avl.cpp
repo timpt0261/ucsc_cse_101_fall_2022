@@ -89,20 +89,7 @@ Node* AVL::left_rotate(Node *x)
   y->left = x;
   x->right = T2;
 
-  // // update parent
-  // if (x == root)
-  // {
-  //   root = y;
-  // }
-  // else if (parent->left == x)
-  // {
-  //   parent->left = y;
-  // }
-  // else
-  // {
-  //   parent->right = y;
-  // }
-
+  // update parents
   y->parent = parent;
   x->parent = y;
 
@@ -126,21 +113,7 @@ Node* AVL::right_rotate(Node *y)
   // Perform rotation
   x->right = y;
   y->left = T2;
-
-  // update parent
-  // if (y == root)
-  // {
-  //   root = x;
-  // }
-  // else if (parent->left == y)
-  // {
-  //   parent->left = x;
-  // }
-  // else
-  // {
-  //   parent->right = x;
-  // }
-
+  // update parents
   x->parent = parent;
   y->parent = x;
 
@@ -229,6 +202,7 @@ Node* AVL::insert(Node *start, Node *to_insert)
     else  // need to make recursive call
     {
       start->left = insert(start->left, to_insert);
+      start->height = max(height(start->left), height(start->right)) + 1;
       if(height(start) >= 3){
         return reconstruct(start, to_insert->key);
       }
@@ -242,11 +216,13 @@ Node* AVL::insert(Node *start, Node *to_insert)
       start->right = to_insert;  // make this node the right child
       to_insert->parent = start; // set the parent pointer
       start->height = max(height(start->left), height(start->right)) + 1;
+     
       return start;
     }
     else // need to make recursive call
     {
       start->right = insert(start->right, to_insert);
+      start->height = max(height(start->left), height(start->right)) + 1;
       if (height(start) >= 3)
       {
         return reconstruct(start, to_insert->key);
@@ -279,6 +255,31 @@ Node *AVL::find(Node *start, string val)
     return find(start->left, val);
   else // val is larger, so go right
     return find(start->right, val);
+}
+
+Node* AVL::find_closest_low(string low){
+  Node* output= find(low);
+  if(output != NULL)
+    return output;
+
+  return find_closest_low(root, low);
+  
+}
+
+Node *AVL::find_closest_low(Node *start, string low)
+{
+  if (start == NULL || start->key == low) // tree is empty or we found low
+    return start;
+  if (low < start->key) // low is smaller, so go left
+    return find_closest_low(start->left, low);
+  else // val is larger, so go right
+    return find_closest_low(start->right, low);
+}
+
+Node* AVL::find_closest_high(string high){
+  Node *output = find(high);
+  if (output != NULL)
+    return output;
 }
 
 // minNode(Node* start): gets the minimum Node in subtree rooted at start

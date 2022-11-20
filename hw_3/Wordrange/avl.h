@@ -43,7 +43,7 @@ public:
   int range_low(Node *, string low);   // searches in subtree for all nodes greather than equal to low
   int range(Node *start, string low, string high);
   int range(string low, string high); // searches for nodes within low high
-
+  
   // AVL Imlpementation
   int max(int, int);          // return max
   int height(Node *);         // returns height of the node
@@ -56,6 +56,12 @@ public:
   Node* insert(Node *, Node *);       // simple BST insertion plus a rotation
   Node *find(string);                 // find int in tree, and return pointer to node with that int. If there are multiple copies, this only finds one copy
   Node *find(Node *, string);         // recursive version that finds in a rooted subtree
+
+  Node *find_closest_low(string); // find closes Node to string
+  Node* find_closest_low(Node*,string);
+  Node *find_closest_high(string);
+  Node *find_closest_high(Node*,string);
+
   Node *minNode(Node *);              // gets minimum node in rooted subtree
   Node *maxNode(Node *);              // gets maximum node in rooted subtree
   Node *deleteKey(string);            // remove a node with string (if it exists), and return pointer to deleted node. This does not delete all nodes with the value.
