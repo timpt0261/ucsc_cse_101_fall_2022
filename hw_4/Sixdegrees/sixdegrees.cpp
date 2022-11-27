@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <utility>
 #include <array>
 #include <string>
 #include <cstring>
@@ -64,9 +65,6 @@ int main(int argc, char** argv) {
   ofstream output;
   fstream movie;
 
-  
-
-
   movie.open("cleaned_movie_list");
   input.open(argv[1]);
   output.open(argv[2]);
@@ -83,6 +81,7 @@ int main(int argc, char** argv) {
     vector <string> tokens;
     stringstream check1(curr_line);
     string intermediate;
+// debug
 
     while(getline(check1, intermediate, ' '))
     {
@@ -90,7 +89,7 @@ int main(int argc, char** argv) {
     }
 
     for (int i = 0; i < tokens.size(); i++)
-      cout << tokens[i] << '\n';
+      cout << tokens[i] << endl;
   }
   
   movie.close();

@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall
+CXXFLAGS = -Wall -Wextra
 
 OBJECTS =  sixdegrees.o
 
