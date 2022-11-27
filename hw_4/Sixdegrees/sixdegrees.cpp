@@ -1,37 +1,43 @@
-#include <algorithm>
 #include <iostream>
-#include <utility>
+#include <algorithm>
 #include <array>
-#include <string>
 #include <cstring>
+#include <deque>
 #include <fstream>
-#include <string>
+#include <list>
+#include <map>
+#include <queue>
+#include <set>
 #include <sstream>
-#include <stack>
-#include <stdexcept>
+#include <string>
+#include <string>
+#include <utility>
 #include <vector>
-#include <deque>          
-#include <list>           
-#include <queue>   
 
 using namespace std;
 // ref https://www.youtube.com/watch?v=drpdVQq5-mk&t=177s
-// class Graph{
-//   unordered_map<string actor_a, list<Pair<string actor_b,string movie_name>>> l;
-//   public:
+class Graph{
+  int V;// number of vertexes
+  int E; // number of Edges
+  vector<string> _v;
+  //Adj List
+  map<string, list<pair<string, string>>> l;
+  public:
 
-//     // creates new edge for graph
-//     // Input : string of actor names
-//     // Output : void
-//     void addEdge(string actor_a, string actor_b,string movie_name ){
-//       if( actor_a == actor_b)// case of duplicates
-//         return;
-//       l[actor_a].push_back(make_pair(actor_b, movie_name));
-//       l[actor_b].push_back(make_pair(actor_a, movie_name));
-//       return;
+    // creates new edge for graph
+    // Input : string of actor names
+    // Output : void
+    void addEdge(string actor_a, string actor_b,string movie_name ){
+      if( actor_a == actor_b)// case of duplicates
+        return;
+      l[actor_a].push_back(make_pair(actor_b, movie_name));
+      l[actor_b].push_back(make_pair(actor_a, movie_name));
+      return;
 
-//     }
-// }
+    }
+
+
+};
 
 // string breadith_first_search(string actor_1, string actor_2){
 //   queue<string> Q;
@@ -65,7 +71,8 @@ int main(int argc, char** argv) {
   ofstream output;
   fstream movie;
 
-  movie.open("cleaned_movie_list");
+  string movie_file = "cleaned_movielist.txt";
+  movie.open(movie_file, ios::in);
   input.open(argv[1]);
   output.open(argv[2]);
 
@@ -81,15 +88,13 @@ int main(int argc, char** argv) {
     vector <string> tokens;
     stringstream check1(curr_line);
     string intermediate;
-// debug
 
     while(getline(check1, intermediate, ' '))
     {
         tokens.push_back(intermediate);
     }
 
-    for (int i = 0; i < tokens.size(); i++)
-      cout << tokens[i] << endl;
+    string movie_name = tokens[0];
   }
   
   movie.close();
