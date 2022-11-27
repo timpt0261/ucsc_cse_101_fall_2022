@@ -15,25 +15,68 @@
 #include <vector>
 
 using namespace std;
+
+// Helper function that returns the index of a set
+//https://www.geeksforgeeks.org/find-index-of-an-element-in-a-set-in-c/
+int GetIndex(set<string> S, string k){
+  int index = 1;
+  for(auto u : S){
+    if(u == k)
+      return index;
+    index++;
+  }
+  return -1;
+}
 // ref https://www.youtube.com/watch?v=drpdVQq5-mk&t=177s
 class Graph{
   int V;// number of vertexes
-  int E; // number of Edges
-  vector<string> _v;
-  //Adj List
-  map<string, list<pair<string, string>>> l;
-  public:
-
+  set<string> _v; // Set of  vectecies
+  map<string, list<pair<string, string>>> l; // Adj list
+  private:
+    string reconstructed(start, end, prev){
+      string  output;
+      return output;
+    } 
+  public :
     // creates new edge for graph
     // Input : string of actor names
     // Output : void
-    void addEdge(string actor_a, string actor_b,string movie_name ){
+    void addEdge(string actor_a, string actor_b, string movie_name){
       if( actor_a == actor_b)// case of duplicates
         return;
       l[actor_a].push_back(make_pair(actor_b, movie_name));
       l[actor_b].push_back(make_pair(actor_a, movie_name));
+      _v.insert(actor_a);
+      _v.insert(actor_b);
+      V = _v.size();
       return;
+    }
 
+    string bfs(string start,string end){
+      queue<string> Q; // initlize queue
+      Q.emplace(start); // enqueue start
+      vector<bool> visited(V, false); // initlize bool vector of visited
+      int index = GetIndex(_v, start); // get the index of the start string
+      visited[index] = true;
+      vector<string>prev(V, NULL); // initilaize string vector of prev
+
+      while(!Q.empty()){
+        string u = Q.front(); // u = dequeue of Q
+        Q.pop();
+        auto neighbors = l[u]; // set neighbors 
+
+        for(auto& next:: neighbors){
+
+          int next_index = GetIndex(_v, next);
+          if(!visited[next_index]){
+            visited[next_index] = true;
+            prev[next_index] = u;
+            Q.emplace(next);
+          }
+
+        }
+      }
+      return "ab";
     }
 
 
