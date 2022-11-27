@@ -38,28 +38,29 @@ private:
 public:
   AVL(); // Default constructor sets root to null
 
-  // Range Query
-  int range_high(Node *, string high); // searches in subtree for all nodes less than high
-  int range_low(Node *, string low);   // searches in subtree for all nodes greather than equal to low
-  int range(Node *start, string low, string high);
-  int range(string low, string high); // searches for nodes within low high
-  
+
+
   // AVL Imlpementation
   int max(int, int);          // return max
   int height(Node *);         // returns height of the node
   int BalanceFactor(Node *);  // returns the Balance Factor of the current node
-  Node* left_rotate(Node *);  // Complete a left rotation
-  Node* right_rotate(Node *); // Completes a right rotation
-  Node* reconstruct(Node*, string);
+  Node *left_rotate(Node *);  // Complete a left rotation
+  Node *right_rotate(Node *); // Completes a right rotation
+  Node *reconstruct(Node *, string);
 
   void insert(string);
-  Node* insert(Node *, Node *);       // simple BST insertion plus a rotation
+  Node *insert(Node *, Node *);       // Consider, repeats, and runs at 30 secs
   Node *find(string);                 // find int in tree, and return pointer to node with that int. If there are multiple copies, this only finds one copy
   Node *find(Node *, string);         // recursive version that finds in a rooted subtree
+  
+  Node* find_closest(string);
+  Node *find_closest(Node *node, string); //finds closest existing node
 
-  Node *find_closest(string); // find closes Node to string
-  Node* find_closest(Node*,string);
- 
+  // Range Query
+  int range_high(Node *, Node*, string high); // searches in subtree for all nodes less than high
+  int range_low(Node *, Node*,string low);   // searches in subtree for all nodes greather than equal to low
+  int range(Node *start,Node* stop_1, Node*stop_2, string low, string high);
+  int range(string low,string high); // searches for nodes within low high
 
   Node *minNode(Node *);              // gets minimum node in rooted subtree
   Node *maxNode(Node *);              // gets maximum node in rooted subtree

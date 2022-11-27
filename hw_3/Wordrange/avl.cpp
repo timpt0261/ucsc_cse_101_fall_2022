@@ -22,38 +22,6 @@ AVL::AVL()
   root = NULL;
 }
 
-int AVL ::range_high(Node *start, string high)
-{ // searches in subtree for all nodes less than high
-
-  if (start == NULL) // base case
-    return 0;
-  int x = start->key <= high ? 1 : 0; // add 1 if within range, else add 0
-  return range_high(start->left, high) + range_high(start->right, high) + x;
-}
-
-int AVL ::range_low(Node *start, string low)
-{                    // searches in subtree for all nodes
-  Node* stop = find_closest_low(low);
-  if (start == NULL) // base case
-    return 0;
-  int x = start->key >= low ? 1 : 0; // add 1 if within range, else add 0
-  return range_low(start->left, low) + range_low(start->right, low) + x;
-}
-
-int AVL ::range(Node *start, string low, string high)
-{
-  if (start == NULL)
-    return 0; // base case 0
-  if (start->key < low)
-    return range(start->right, low, high); // base case 1
-  else if (start->key > high)
-    return range(start->left, low, high); // base case 2
-
-  return range_low(start->left, low) + range_high(start->right, high) + 1;
-}
-
-int AVL ::range(string low, string high) { return range(root, low, high); }
-
 int AVL::height(Node *node)
 {
   if (node == NULL)
@@ -258,23 +226,75 @@ Node *AVL::find(Node *start, string val)
     return find(start->right, val);
 }
 
-Node* AVL::find_closest_low(string low){
-  Node* output= find(low);
-  if(output != NULL)
+Node* AVL::find_closest(string val){
+  Node* output= find(val);
+  if(output)
     return output;
-
-  return find_closest_low(root, low);
+  return find_closest(root, val);
   
 }
 
-Node *AVL::find_closest_low(Node *start, string low)
+// Finds next approxiate node
+Node *AVL::find_closest(Node *start, string val)
 {
-  if (start == NULL || (low > start->left->key && low < start->right->key))
+  if (start == NULL || (val > start->left->key && val < start->right->key))
     return start;
-  if (low < start->key) // low is smaller, so go left
-    return find_closest_low(start->left, low);
+  if (val < start->key) // low is smaller, so go left
+    return find_closest(start->left, val);
   else // val is larger, so go right
-    return find_closest_low(start->right, low);
+    return find_closest(start->right, val);
+}
+
+int AVL ::range_high(Node *start, Node* stop, string high)
+{                    // searches in subtree for all nodes less than high
+  if (start == NULL) // base case
+    return 0;
+  if (start == stop)
+    return range_high(start->left, stop,high) + 1;
+  int x = start->key <= high ? 1 : 0; // add 1 if within range, else add 0
+  return range_high(start->left, stop, high) + range_high(start->right, stop, high) + x;
+}
+
+int AVL ::range_low(Node *start, Node* stop, string low)
+{                    // searches in subtree for all nodes
+  if (start == NULL) // base case
+    return 0;
+  if (start == stop)
+  
+    return range_low(start->right, stop, low) + 1;
+
+  int x = start->key >= low ? 1 : 0; // add 1 if within range, else add 0
+  return range_low(start->left,stop, low) + range_low(start->right, stop,low) + x;
+}
+// int AVL:: range_fast(Node* start_1, Node* start_2, string low, string high){
+//   if(start_1 == NULL)
+//     return 0;
+//   int x = start_1->key >= low ? 1 : 0;    // add 1 if within range, else add 0
+//   int y = start_2->key <= high ? 1 : 0; // add 1 if within range, else add 0
+
+//   x = range_low(start_1->left, low) + range_low(start_1->right, low) + x;
+//   y = range_high(start_2->left,high) + range_high(start_2->right, high) + y;
+//   return x + y;
+// }
+
+int AVL ::range(Node *start, Node* stop_1, Node* stop_2,string low, string high)
+{
+  if (start == NULL)
+    return 0; // base case 0
+  if (start->key < low)
+    return range(start->right,stop_1, stop_2, low, high); // base case 1
+  else if (start->key > high)
+    return range(start->left, stop_1, stop_2,low, high); // base case 2
+  
+  return range_low(start->left,stop_1, low) +range_high(start->right, stop_2,high) + 1;
+}
+
+int AVL ::range(string low, string high)
+{
+  Node *l_stop = find_closest(low);
+  Node *r_stop = find_closest(high);
+
+  return range(root, l_stop, r_stop, low, high);
 }
 
 // minNode(Node* start): gets the minimum Node in subtree rooted at start
