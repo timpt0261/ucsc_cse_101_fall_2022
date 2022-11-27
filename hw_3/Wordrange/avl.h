@@ -57,10 +57,9 @@ public:
   Node *find(string);                 // find int in tree, and return pointer to node with that int. If there are multiple copies, this only finds one copy
   Node *find(Node *, string);         // recursive version that finds in a rooted subtree
 
-  Node *find_closest_low(string); // find closes Node to string
-  Node* find_closest_low(Node*,string);
-  Node *find_closest_high(string);
-  Node *find_closest_high(Node*,string);
+  Node *find_closest(string); // find closes Node to string
+  Node* find_closest(Node*,string);
+ 
 
   Node *minNode(Node *);              // gets minimum node in rooted subtree
   Node *maxNode(Node *);              // gets maximum node in rooted subtree

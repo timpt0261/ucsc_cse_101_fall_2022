@@ -33,6 +33,7 @@ int AVL ::range_high(Node *start, string high)
 
 int AVL ::range_low(Node *start, string low)
 {                    // searches in subtree for all nodes
+  Node* stop = find_closest_low(low);
   if (start == NULL) // base case
     return 0;
   int x = start->key >= low ? 1 : 0; // add 1 if within range, else add 0
@@ -268,18 +269,12 @@ Node* AVL::find_closest_low(string low){
 
 Node *AVL::find_closest_low(Node *start, string low)
 {
-  if (start == NULL || start->key == low) // tree is empty or we found low
+  if (start == NULL || (low > start->left->key && low < start->right->key))
     return start;
   if (low < start->key) // low is smaller, so go left
     return find_closest_low(start->left, low);
   else // val is larger, so go right
     return find_closest_low(start->right, low);
-}
-
-Node* AVL::find_closest_high(string high){
-  Node *output = find(high);
-  if (output != NULL)
-    return output;
 }
 
 // minNode(Node* start): gets the minimum Node in subtree rooted at start
