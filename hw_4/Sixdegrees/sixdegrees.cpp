@@ -5,7 +5,7 @@
 #include <deque>
 #include <fstream>
 #include <list>
-#include <map>
+#include <unordered_map>
 #include <queue>
 #include <set>
 #include <sstream>
@@ -29,15 +29,13 @@ int GetIndex(set<string> S, string k){
 }
 // ref https://www.youtube.com/watch?v=drpdVQq5-mk&t=177s
 class Graph{
-  int V;// number of vertexes
-  set<string> _v; // Set of  vectecies
-  map<string, list<pair<string, string>>> l; // Adj list
-  private:
-    string reconstructed(start, end, prev){
-      string  output;
-      return output;
-    } 
+    // https://www.youtube.com/watch?v=oDqjPvD54Ss
+  int V;                                     // number of vertexes
+  set<string> _v;                            // Set of  vectecies
+  unordered_map<string, list<pair<string, string>>> l; // Adj list
   public :
+    
+
     // creates new edge for graph
     // Input : string of actor names
     // Output : void
@@ -52,21 +50,36 @@ class Graph{
       return;
     }
 
-    string bfs(string start,string end){
+    void reconstructed(string start, string end, vector<string> prev, vector<pair<string, string>> &output)
+    {
+      vector<pair<string, string>> path;
+      for (string at = end; at.empty(); at = prev[GetIndex(_v, at)])
+        path.push_back(at);
+      reverse(path.begin(), path.end());
+
+      if (path[0] == start){
+        output = path;
+      }
+      return;
+    }
+
+    void bfs(string start, string end, vector<pair<string, string>> &output)
+    {
       queue<string> Q; // initlize queue
       Q.emplace(start); // enqueue start
       vector<bool> visited(V, false); // initlize bool vector of visited
       int index = GetIndex(_v, start); // get the index of the start string
       visited[index] = true;
-      vector<string>prev(V, NULL); // initilaize string vector of prev
+      vector<string> prev(V, NULL); // initilaize string vector of prev
 
       while(!Q.empty()){
         string u = Q.front(); // u = dequeue of Q
         Q.pop();
-        auto neighbors = l[u]; // set neighbors 
+        auto neighbors = l[u]; // set of neighbors 
 
-        for(auto& next:: neighbors){
-
+        for(int i = 0; i < neighbors.size(); i++){
+          string next = neighbors.front().first;
+          neighbors.pop_front();
           int next_index = GetIndex(_v, next);
           if(!visited[next_index]){
             visited[next_index] = true;
@@ -76,33 +89,10 @@ class Graph{
 
         }
       }
-      return "ab";
+      reconstructed(start, end, prev, output);
+      return;
     }
-
-
 };
-
-// string breadith_first_search(string actor_1, string actor_2){
-//   queue<string> Q;
-//   vector<string> pred(movie_list.size());
-//   vector<bool> visited;
-  
-//   pred[actor_1] = 
-//   visited[actor_1] = true;
-//   while(!Q.empty){
-//     string u = Q.top();
-//     Q.pop();
-//     // for every adjacent list 
-//     for(int i = 0; i < ].size(); i++){
-//       // if visted  is false 
-//         // visited is true
-//         // pred[v] = u
-//         // enque (Q, u)
-//     }
-
-//   }
-
-// }
 
 int main(int argc, char** argv) {
   if (argc < 3)  // must provide two arguments as input
@@ -119,16 +109,15 @@ int main(int argc, char** argv) {
   input.open(argv[1]);
   output.open(argv[2]);
 
-  string command, curr_line;
-  char *com,*d_1, *rank_str;
-
-  
+  string command, curr_line;                  // to store the next command and operation
+  char *com, *dummy, *valstr, *op;            // for using with strtok, strtol
+  Graph G;
 
   // create graph
   // https://www.geeksforgeeks.org/tokenizing-a-string-cpp/
   while(getline(movie, curr_line)){
     if(curr_line.length() == 0){continue;}
-    vector <string> tokens;
+    deque <string> tokens;
     stringstream check1(curr_line);
     string intermediate;
 
@@ -137,8 +126,34 @@ int main(int argc, char** argv) {
         tokens.push_back(intermediate);
     }
 
-    string movie_name = tokens[0];
+    string movie_name = tokens.front();
+    tokens.pop_front();
+    for(int i = 0; i< tokens.size(); i++){
+      for (int j = 0; i < tokens.size(); j++)
+      {
+        if( i == j)
+          continue;
+        G.addEdge(tokens.at(i), tokens.at(j),movie_name);
+      }
+    } 
   }
+
+
+  while(getline(input, command)){
+    if(command.length() == 0){continue;}
+    deque<strings> com;
+
+    stringstream check2(command);
+    string intermediate;
+
+    while (getline(check2, intermediate, ' '))
+    {
+      tokens.push_back(intermediate);
+    }
+
+
+  }
+  
   
   movie.close();
   input.close();
