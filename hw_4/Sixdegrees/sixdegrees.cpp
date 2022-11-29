@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <queue>
 #include <set>
+#include <unordered_set>
 #include <sstream>
 #include <string>
 #include <string>
@@ -50,20 +51,34 @@ class Graph{
       return;
     }
 
-    void reconstructed(string start, string end, vector<string> prev, vector<pair<string, string>> &output)
+    string reconstructed(string start, string end, vector<string> prev)
     {
-      vector<pair<string, string>> path;
-      for (string at = end; at.empty(); at = prev[GetIndex(_v, at)])
+      vector<string> path;
+
+      for (string at = end; at.empty(); at = prev[GetIndex(_v, at)]){
+        // string movie_name = at != end ? prev[GetIndex(_v, at)].second: "";
         path.push_back(at);
+      }
       reverse(path.begin(), path.end());
+      auto a = l[start];
+      
 
       if (path[0] == start){
-        output = path;
+        string out = "";
+        for (list<pair<string, string>>::iterator curr = a.begin(); curr != a.end(); curr++)
+        {
+          if(curr->first == ){
+
+          }
+
+             
+        }
+        
       }
-      return;
+      return "";
     }
 
-    void bfs(string start, string end, vector<pair<string, string>> &output)
+    string bfs(string start, string end)
     {
       queue<string> Q; // initlize queue
       Q.emplace(start); // enqueue start
@@ -79,18 +94,20 @@ class Graph{
 
         for(int i = 0; i < neighbors.size(); i++){
           string next = neighbors.front().first;
+          // string adj = neighbors.front().second;
           neighbors.pop_front();
           int next_index = GetIndex(_v, next);
+
           if(!visited[next_index]){
             visited[next_index] = true;
             prev[next_index] = u;
-            Q.emplace(next);
+            Q.push(next);
           }
-
+          
         }
       }
-      reconstructed(start, end, prev, output);
-      return;
+
+      return reconstructed(start, end, prev);
     }
 };
 
@@ -141,15 +158,17 @@ int main(int argc, char** argv) {
 
   while(getline(input, command)){
     if(command.length() == 0){continue;}
-    deque<strings> com;
+    deque<string> com;
 
     stringstream check2(command);
     string intermediate;
 
     while (getline(check2, intermediate, ' '))
     {
-      tokens.push_back(intermediate);
+      com.push_back(intermediate);
     }
+
+    output << G.bfs(com.at(0), com.at(1)) << endl;
 
 
   }
