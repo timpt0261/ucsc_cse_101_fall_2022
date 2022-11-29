@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/mnt/c/Users/Owner/Documents/Fall_2022_UCSC/CSE_101(Data Structure and Algorithims)/hw_4/Sixdegrees/sixdegrees",
-            "args": ["Sixdegrees/simple-input.txt", "Sixdegrees/output.txt"],
+            "args": ["simple-input.txt", "output.txt"],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],
